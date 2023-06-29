@@ -6,7 +6,7 @@
 /*   By: pminialg <pminialg@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 10:12:52 by pminialg      #+#    #+#                 */
-/*   Updated: 2023/06/28 17:20:17 by pminialg      ########   odam.nl         */
+/*   Updated: 2023/06/28 18:26:07 by pminialg      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,26 @@ void	parse_file(char *file)
 	{
 		write(1, "ERROR!!!!!\n", 12);
 	}
-	i = 0;
-	while (i < num_rows)
-	{
-		free(splitarray[i]);
-		i++;
-	}
-	free(splitarray);
-	// free_memory(data, num_rows, splitarray);
+	// i = 0;
+	// while (i < num_rows)
+	// {
+	// 	free(splitarray[i]);
+	// 	i++;
+	// }
+	// free(splitarray);
+	free_memory(data, num_rows, splitarray);
+}
+
+void leaks(void)
+{
+	system("leaks a.out");
 }
 
 int	main(int argc, char *argv[])
 {
 	char	*file;
 
+	atexit(leaks);
 	file = "1.map";
 	parse_file(file);
 	return (0);

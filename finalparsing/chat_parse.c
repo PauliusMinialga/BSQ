@@ -1,49 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   chat_parse.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pminialg <pminialg@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/06/28 18:14:44 by pminialg      #+#    #+#                 */
+/*   Updated: 2023/06/28 18:17:20 by pminialg      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
-int open_file(char *file)
+int	parse_first_line(char *buffer, int *num, char *chars)
 {
-	int openfile = open(file, O_RDONLY);
-	if (openfile == -1)
-	{
-		write(1, "Failed to open the file", 24);
-		return -1;
-	}
-	return (openfile);
-}
+	int	offset;
+	int	i;
 
-ssize_t read_file(int openfile, char *buffer, size_t size)
-{
-	ssize_t bytesread = read(openfile, buffer, size);
-	close(openfile);
-
-	if (bytesread == -1)
-	{
-		write(1, "Failed to read from file", 25);
-		return -1;
-	}
-	return (bytesread);
-}
-
-int parse_first_line(char *buffer, int *num, char *chars)
-{
-	int offset = 0;
+	offset = 0;
+	i = 0;
 	while (buffer[offset] != '.')
 	{
 		offset++;
 	}
-
 	*num = ft_atoi(ft_strndup(buffer, offset));
-
-	for (int i = 0; i < 3; i++)
+	while (i < 3)
 	{
 		chars[i] = buffer[offset + i];
+		i++;
 	}
 	chars[3] = '\0';
-
 	return (offset);
 }
 
-char **parse_lines(char *buffer, int num)
+char	**parse_lines(char *buffer, int num)
 {
 	char **data = (char **)malloc(num * sizeof(char *));
 	if (data == NULL)
@@ -106,51 +96,9 @@ void free_memory(char **data, int num_rows, char **splitarray)
 	}
 	free(splitarray);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < num_rows; i++)
 	{
 		free(data[i]);
 	}
 	free(data);
 }
-
-// void parse_file(char *file)
-// {
-// 	int openfile = open_file(file);
-// 	if (openfile == -1)
-// 	{
-// 		return ;
-// 	}
-
-// 	char buffer[MAX_SIZE];
-// 	ssize_t bytesread = read_file(openfile, buffer, MAX_SIZE);
-// 	if (bytesread == -1)
-// 	{
-// 		return ;
-// 	}
-
-// 	int num = 0;
-// 	char chars[4];
-// 	int offset = parse_first_line(buffer, &num, chars);
-
-// 	char **data = parse_lines(buffer, num);
-// 	if (data == NULL)
-// 	{
-// 		return ;
-// 	}
-
-// 	int num_rows = num;
-// 	int num_cols = (ft_strlen(data[1]) / num) + 1;
-// 	char **splitarray;
-
-// 	int string_length = ft_strlen(data[1]) / 1;
-// 	split_the_array(data[1], string_length, num_rows, num_cols, &splitarray);
-
-// 	modify_array(splitarray, num_rows, num_cols, chars);
-
-// 	if ((string_length + 1) % num_cols != 0)
-// 	{
-// 		write(1, "ERROR!!!!!\n", 12);
-// 	}
-
-// 	free_memory(data, num_rows, splitarray);
-// }
